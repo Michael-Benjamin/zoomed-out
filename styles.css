@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+#game-container {
+    margin: 20px;
+}
+
+#teams {
+    margin-bottom: 20px;
+}
+
+.team {
+    display: inline-block;
+    width: 45%;
+    margin: 20px;
+    padding: 10px;
+    border: 2px solid #007BFF;
+    border-radius: 10px;
+}
+
+#image-container {
+    margin: 20px 0;
+}
+
+#zoom-box {
+    overflow: hidden;
+    width: 500px; /* Set width of zoom box */
+    height: 500px; /* Set height of zoom box */
+    margin: 0 auto;
+    border: 2px solid #007BFF;
+    position: relative;
+    display: flex; /* Use flexbox to center the image */
+    justify-content: center; 
+    align-items: center; 
+}
+
+#image {
+    transform-origin: center; /* Set the origin point for zooming to the center */
+    transition: transform 0.3s; /* Smooth transition */
+    width: auto; /* Allow the image to scale beyond its original size */
+    transform: scale(3); /* Start zoomed in */
+}
+
+#pointsIndicator, #turnIndicator {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#zoomOutButton, #submitGuessButton {
+    margin-top: 10px;
+    padding: 10px 15px;
+}
