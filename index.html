@@ -8,30 +8,35 @@
 </head>
 <body>
     <h1>Zoomed Out Challenge</h1>
-    <div id="game-container">
-        <div id="teams">
-            <div class="team" id="teamA">
-                <h2>Team A</h2>
-                <p>Score: <span id="scoreA">0</span></p>
-            </div>
-            <div class="team" id="teamB">
-                <h2>Team B</h2>
-                <p>Score: <span id="scoreB">0</span></p>
-            </div>
-        </div>
-        <div id="image-container">
-            <div id="zoom-box">
-                <img id="image" src="images/image1.jpg" alt="Zoomable Image" />
-            </div>
-            <p id="pointsIndicator">Points Available: <span id="pointsValue">1</span></p>
-            <p id="turnIndicator">Current Turn: <span id="currentTeam">Team A</span></p>
-            <button id="zoomOutButton">Zoom Out</button>
-            <input type="text" id="guessInput" placeholder="Type your guess here" />
-            <button id="submitGuessButton">Submit Guess</button>
-        </div>
-        <div id="message"></div>
+    <div id="player-management">
+        <input type="text" id="playerInput" placeholder="Enter player name" />
+        <button id="addPlayerButton">Add Player</button>
+        <button id="randomizeTeamsButton">Randomize Teams</button>
+        <div id="players"></div>
     </div>
-    
+    <div id="teams">
+        <div class="team" id="teamA">
+            <h2>Team A</h2>
+            <p><span id="teamAPlayers"></span></p>
+            <p>Score: <span id="scoreA">0</span></p>
+        </div>
+        <div class="team" id="teamB">
+            <h2>Team B</h2>
+            <p><span id="teamBPlayers"></span></p>
+            <p>Score: <span id="scoreB">0</span></p>
+        </div>
+    </div>
+    <div id="image-container">
+        <div id="zoom-box">
+            <img id="image" src="images/image1.jpg" alt="Zoomable Image" />
+        </div>
+        <p id="pointsIndicator">Points Available: <span id="pointsValue">1</span></p>
+        <p id="turnIndicator">Current Turn: <span id="currentTeam">Team A</span></p>
+        <button id="correctButton" class="guess-button" aria-label="Correct Guess">✓</button>
+        <button id="wrongButton" class="guess-button" aria-label="Wrong Guess">✖</button>
+    </div>
+    <div id="message"></div>
+
     <script src="script.js"></script>
 </body>
 </html>

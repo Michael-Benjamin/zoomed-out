@@ -4,12 +4,16 @@ body {
     background-color: #f4f4f4;
 }
 
-#game-container {
-    margin: 20px;
+#player-management {
+    margin-bottom: 20px;
+}
+
+#playerInput {
+    margin-right: 10px;
 }
 
 #teams {
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .team {
@@ -50,7 +54,30 @@ body {
     font-weight: bold;
 }
 
-#zoomOutButton, #submitGuessButton {
+.guess-button {
     margin-top: 10px;
     padding: 10px 15px;
+    font-size: 20px; /* Increase font size for symbols */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    width: 75px;
+    border-radius: 15px;
+    background-color: transparent; /* Transparent background */
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+#wrongButton {
+    color: red;
+}
+#correctButton {
+    color: green;
+}
+
+/* Styles for hover effects */
+#wrongButton:hover {
+    color: white; /* Change color on hover for wrong guess */
+    background-color: red; /* Change color on hover for wrong guess */
+}
+#correctButton:hover {
+    color: white; /* Change color on hover for wrong guess */
+    background-color: green; /* Change color on hover for correct guess */
 }
