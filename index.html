@@ -13,6 +13,7 @@
         <button id="addPlayerButton">Add Player</button>
         <button id="randomizeTeamsButton">Randomize Teams</button>
         <div id="players"></div>
+        <button id="startGameButton">Start Game</button>
     </div>
     <div id="teams">
         <div class="team" id="teamA">
@@ -26,12 +27,13 @@
             <p>Score: <span id="scoreB">0</span></p>
         </div>
     </div>
-    <div id="image-container">
+    <div id="image-container" style="display: none;">
         <div id="zoom-box">
-            <img id="image" src="images/image1.jpg" alt="Zoomable Image" />
+            <img id="image" src="" alt="Zoomable Image" />
         </div>
         <p id="pointsIndicator">Points Available: <span id="pointsValue">1</span></p>
         <p id="turnIndicator">Current Turn: <span id="currentTeam">Team A</span></p>
+        <p id="timerDisplay">Time Remaining: <span id="timerValue">20</span> seconds</p>
         <button id="correctButton" class="guess-button" aria-label="Correct Guess">✓</button>
         <button id="wrongButton" class="guess-button" aria-label="Wrong Guess">✖</button>
     </div>

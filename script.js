@@ -19,8 +19,14 @@ let players = []; // Array to hold player names
 let teamAPlayers = [];
 let teamBPlayers = [];
 
-const playersElem = document.getElementById('players');
+let timer; // Timer variable
+const TIMER_DURATION = 20; // duration in seconds
 
+const playerManagementContainer = document.getElementById('player-management');
+const imageContainer = document.getElementById('image-container');
+
+const startGameButton = document.getElementById('startGameButton');
+const playersElem = document.getElementById('players');
 const imageElem = document.getElementById('image');
 const correctButton = document.getElementById('correctButton');
 const wrongButton = document.getElementById('wrongButton');
@@ -34,9 +40,14 @@ const addPlayerButton = document.getElementById('addPlayerButton');
 const randomizeTeamsButton = document.getElementById('randomizeTeamsButton');
 const teamAPlayersElem = document.getElementById('teamAPlayers');
 const teamBPlayersElem = document.getElementById('teamBPlayers');
+const timerDisplay = document.getElementById('timerValue');
 
-// Set the initial image
-loadImage();
+function startGame() {
+    playerManagementContainer.style = "display:none";
+    imageContainer.style = "display:block";
+    // Set the initial image
+    loadImage();
+}
 
 // Load the current image based on the index
 function loadImage() {
@@ -44,6 +55,7 @@ function loadImage() {
     zoomLevel = MAX_ZOOM_LEVEL; // Reset the zoom level
     imageElem.style.transform = `scale(${zoomLevel})`; // Apply zoom
     updatePointsIndicator();
+    resetTimer(); // Start/reset the timer
     messageElem.textContent = ''; // Clear messages
 }
 
@@ -51,6 +63,28 @@ function loadImage() {
 function updatePointsIndicator() {
     const points = zoomLevel / ZOOM_FACTOR;
     pointsValueElem.textContent = points;
+}
+
+// Handle timer countdown
+function startTimer() {
+    let timeRemaining = TIMER_DURATION;
+    timerDisplay.textContent = timeRemaining;
+
+    timer = setInterval(() => {
+        timeRemaining--;
+        timerDisplay.textContent = timeRemaining;
+
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            handleWrongGuess(); // Automatically handle as wrong guess
+        }
+    }, 1000);
+}
+
+// Reset timer function
+function resetTimer() {
+    clearInterval(timer); // Clear the previous timer
+    startTimer(); // Start a new timer
 }
 
 // Handle correct guess
@@ -102,6 +136,7 @@ function zoomOut() {
         zoomLevel -= ZOOM_FACTOR; // Decrease zoom level
         imageElem.style.transform = `scale(${zoomLevel})`;
         updatePointsIndicator(); // Update points available
+        resetTimer();
     } else {
         messageElem.textContent = "Maximum zoom level reached!";
     }
@@ -147,5 +182,6 @@ randomizeTeamsButton.addEventListener('click', () => {
 // Set team's turn display at the start
 currentTeamElem.textContent = `Team ${currentTeam}'s Turn`;
 
+startGameButton.addEventListener('click', startGame);
 correctButton.addEventListener('click', handleCorrectGuess);
 wrongButton.addEventListener('click', handleWrongGuess);
