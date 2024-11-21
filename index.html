@@ -17,12 +17,12 @@
     </div>
     <div id="teams">
         <div class="team" id="teamA">
-            <h2>Team A</h2>
+            <h2>Team A (<span id="teamAPlayersCount"></span>)</h2>
             <p><span id="teamAPlayers"></span></p>
             <p>Score: <span id="scoreA">0</span></p>
         </div>
         <div class="team" id="teamB">
-            <h2>Team B</h2>
+            <h2>Team B (<span id="teamBPlayersCount"></span>)</h2>
             <p><span id="teamBPlayers"></span></p>
             <p>Score: <span id="scoreB">0</span></p>
         </div>
@@ -32,13 +32,26 @@
             <img id="image" src="" alt="Zoomable Image" />
         </div>
         <p id="pointsIndicator">Points Available: <span id="pointsValue">1</span></p>
-        <p id="turnIndicator">Current Turn: <span id="currentTeam">Team A</span></p>
         <p id="timerDisplay">Time Remaining: <span id="timerValue">20</span> seconds</p>
         <button id="correctButton" class="guess-button" aria-label="Correct Guess">✓</button>
         <button id="wrongButton" class="guess-button" aria-label="Wrong Guess">✖</button>
     </div>
     <div id="message"></div>
 
+    <!-- Overlay for showing full image and answer -->
+    <div id="overlay">
+        <img id="fullImage" src="" alt="Full Image" />
+        <p id="answerText"></p>
+        <button id="nextImageButton">Next Image</button>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div id="gameOverOverlay" style="display: none;">
+        <h2 id="winningTeam"></h2>
+        <button id="restartGameButton">Restart Game</button>
+    </div>
+
+    <script src="images.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

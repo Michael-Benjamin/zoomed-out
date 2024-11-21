@@ -1,54 +1,11 @@
 // Game Variables
-const images = [
-    // { id: 1, src: "images/image1.jpg", answer: "strawberry" },
-    // { id: 2, src: "images/image2.jpg", answer: "fly" },
-    // { id: 3, src: "images/image3.jpg", answer: "turtle" },
-    // { id: 4, src: "images/image4.jpg", answer: "coffee beans" },
-    // { id: 5, src: "images/image5.jpg", answer: "measuring tape" },
-    // { id: 6, src: "images/image6.jpg", answer: "moss" },
-    // { id: 7, src: "images/image7.jpg", answer: "nail clipper" }, // needs work
-    // { id: 8, src: "images/image8.jpg", answer: "coin" }, // needs work
-    // { id: 9, src: "images/image9.jpg", answer: "chocolate" },
-    // { id: 10, src: "images/image10.jpg", answer: "onion" },
-    // { id: 11, src: "images/image11.jpg", answer: "dandelion" },
-    // { id: 12, src: "images/image12.jpg", answer: "egg" },
-    // { id: 13, src: "images/image13.jpg", answer: "cuttlery" },
-    // { id: 14, src: "images/image14.jpg", answer: "sunflower" }, // needs work
-    // { id: 15, src: "images/image15.jpg", answer: "pinata" }, // needs work
-    // { id: 16, src: "images/image16.jpg", answer: "hard drive" }, // needs work
-    // { id: 17, src: "images/image17.jpg", answer: "watch" },
-    // { id: 18, src: "images/image18.jpg", answer: "ginger" },
-    // { id: 19, src: "images/image19.jpg", answer: "grasshopper" }, // needs work
-    // { id: 20, src: "images/image20.jpg", answer: "legos" },
-    // { id: 21, src: "images/image21.jpg", answer: "matchstick" },
-    // { id: 22, src: "images/image22.jpg", answer: "badminton" },
-    // { id: 23, src: "images/image23.jpg", answer: "basketball hoop" },
-    // { id: 24, src: "images/image24.jpg", answer: "cat iris" }, // needs work
-    // { id: 25, src: "images/image25.jpg", answer: "rose" },
-    // { id: 26, src: "images/image26.jpg", answer: "monkey" },
-    // { id: 27, src: "images/image27.jpg", answer: "oats" },
-    // { id: 28, src: "images/image28.jpg", answer: "bike wheel" },
-    // { id: 29, src: "images/image29.jpg", answer: "cockatoo" },
-    // { id: 30, src: "images/image30.jpg", answer: "lion" },
-    // { id: 31, src: "images/image31.jpg", answer: "speaker" },
-    // { id: 32, src: "images/image32.jpg", answer: "mushroom" },
-    { id: 33, src: "images/image33.jpg", answer: "kiwi" },
-    { id: 34, src: "images/image34.jpg", answer: "candle" },
-    { id: 35, src: "images/image35.jpg", answer: "tennis ball" },
-    { id: 36, src: "images/image36.jpg", answer: "chain" },
-    { id: 37, src: "images/image37.jpg", answer: "newspaper" },
-    { id: 38, src: "images/image38.jpg", answer: "microscope" },
-    { id: 39, src: "images/image39.jpg", answer: "koala bear" },
-
-]; // Add as many images as you like
-
 let currentImageIndex = 0;
 const MAX_ZOOM_LEVEL = 5;
 let zoomLevel = MAX_ZOOM_LEVEL; // Initial zoom level of 3 (zoomed in)
 const ZOOM_FACTOR = 1;
 let teamAScore = 0;
 let teamBScore = 0;
-let currentTeam = 'A';
+let currentTeam = '';
 let players = []; // Array to hold player names
 let teamAPlayers = [];
 let teamBPlayers = [];
@@ -68,21 +25,42 @@ const messageElem = document.getElementById('message');
 const pointsValueElem = document.getElementById('pointsValue');
 const scoreAElem = document.getElementById('scoreA');
 const scoreBElem = document.getElementById('scoreB');
-const currentTeamElem = document.getElementById('currentTeam');
 const playerInput = document.getElementById('playerInput');
 const addPlayerButton = document.getElementById('addPlayerButton');
 const randomizeTeamsButton = document.getElementById('randomizeTeamsButton');
+const teamAElem = document.getElementById('teamA');
+const teamBElem = document.getElementById('teamB');
 const teamAPlayersElem = document.getElementById('teamAPlayers');
 const teamBPlayersElem = document.getElementById('teamBPlayers');
 const timerDisplay = document.getElementById('timerValue');
+const overlay = document.getElementById('overlay');
+const fullImage = document.getElementById('fullImage');
+const answerText = document.getElementById('answerText');
+const nextImageButton = document.getElementById('nextImageButton');
+const restartGameButton = document.getElementById('restartGameButton');
+const gameOverOverlay = document.getElementById('gameOverOverlay');
 
 
 function startGame() {
+
+    if (players.length < 2 ) {
+        alert("Please add at least two players.");
+        return;
+    }
+
+    if (!teamsRandomized)
+        randomizeTeams()
+
     playerManagementContainer.style = "display:none";
     imageContainer.style = "display:block";
+    
     shuffleImages();
+
     // Set the initial image
     loadImage();
+
+    changeTeam();
+
 }
 
 let shuffledImages = []; // Array to hold shuffled images
@@ -101,7 +79,6 @@ function shuffleImages() {
 function loadImage() {
     
     if (currentImageIndex >= shuffledImages.length) {
-        messageElem.textContent = 'All images have been used!';
         return; // Stop loading images if all have been used
     }
 
@@ -113,6 +90,45 @@ function loadImage() {
     updatePointsIndicator();
     resetTimer(); // Start/reset the timer
     messageElem.textContent = ''; // Clear messages
+}
+
+function showGameOverOverlay() {
+
+    clearInterval(timer); // Stop the timer if it's running
+    
+    // All images have been used, end the game
+    let winningTeam = '';
+    if (teamAScore > teamBScore) {
+        winningTeam = 'Team A Wins!';
+    } else if (teamBScore > teamAScore) {
+        winningTeam = 'Team B Wins!';
+    } else {
+        winningTeam = 'It\'s a Tie!';
+    }
+
+    document.getElementById('winningTeam').textContent = winningTeam; // Set winning team
+    gameOverOverlay.style.display = 'flex'; // Show overlay
+
+}
+
+// Event listener for the Restart Game button
+restartGameButton.addEventListener('click', () => {
+    resetGame();
+    startGame();
+});
+
+function resetGame() {
+
+    currentImageIndex = 0;
+    currentTeam = '';
+    teamAScore = 0;
+    teamBScore = 0;
+    scoreAElem.textContent = teamAScore;
+    scoreBElem.textContent = teamBScore;
+    messageElem.textContent = '';
+    overlay.style.display = 'none'; // Hide overlays
+    gameOverOverlay.style.display = 'none'; // Hide the game over overlay
+
 }
 
 // Update points indicator
@@ -143,48 +159,94 @@ function resetTimer() {
     startTimer(); // Start a new timer
 }
 
-// Handle correct guess
-function handleCorrectGuess() {
-    const points = zoomLevel / ZOOM_FACTOR; // Points system based on zoom level
-    if (currentTeam === 'A') {
-        teamAScore += points;
-        scoreAElem.textContent = teamAScore;
-        currentTeam = 'B'; // Switch to Team B
-    } else {
-        teamBScore += points;
-        scoreBElem.textContent = teamBScore;
-        currentTeam = 'A'; // Switch to Team A
-    }
-    currentTeamElem.textContent = `Team ${currentTeam}'s Turn`; // Update current turn display
-    messageElem.textContent = `Correct! Team ${currentTeam === 'A' ? 'B' : 'A'} gets ${points} points.`;
+// Show overlay with full image and answer
+function showOverlay() {
+    const currentImage = shuffledImages[currentImageIndex];
+    fullImage.src = currentImage.src; // Set full size image
+    answerText.textContent = `Answer: ${currentImage.answer}`; // Display the answer
+    overlay.style.display = 'flex'; // Show overlay
+}
+
+// Hide overlay and load next image
+nextImageButton.addEventListener('click', () => {
+
+    overlay.style.display = 'none'; // Hide overlay
 
     if (currentImageIndex !== images.length - 1) {
+        changeTeam();
         currentImageIndex = (currentImageIndex + 1) % images.length; // Change to next image
         loadImage(); // Load next image
     } else {
-        clearInterval(timer);
-        alert("Game over!")
+        showGameOverOverlay();
     }
+
+});
+
+function changeTeam() {
+
+    if (currentTeam === 'A') {
+        currentTeam = 'B'; // Switch to Team B
+
+        // Apply styling to the switched teams
+        teamBElem.style.fontSize = '20px';
+        teamBElem.style.color = 'white';
+        teamBElem.style.backgroundColor = 'green';
+
+        teamAElem.style.fontSize = '';
+        teamAElem.style.color = 'black';
+        teamAElem.style.backgroundColor = 'white';
+
+    } else {
+        currentTeam = 'A'; // Switch to Team A
+
+        // Apply styling to the switched teams
+        teamAElem.style.fontSize = '20px';
+        teamAElem.style.color = 'white';
+        teamAElem.style.backgroundColor = 'green';
+
+        teamBElem.style.fontSize = '';
+        teamBElem.style.color = 'black';
+        teamBElem.style.backgroundColor = 'white';
+
+    }
+
+}
+
+// Handle correct guess
+function handleCorrectGuess() {
+
+    const points = zoomLevel / ZOOM_FACTOR; // Points system based on zoom level
+
+    if (currentTeam === 'A') {
+
+        teamAScore += points;
+        scoreAElem.textContent = teamAScore;
+
+    } else {
+
+        teamBScore += points;
+        scoreBElem.textContent = teamBScore;
+
+    }
+
+    messageElem.textContent = `Correct! Team ${currentTeam === 'A' ? 'B' : 'A'} gets ${points} points.`;
+
+    showOverlay(); // Show overlay on right guess
+
 }
 
 // Handle wrong guess
 function handleWrongGuess() {
     if (zoomLevel === ZOOM_FACTOR) {
-        messageElem.textContent = 'Maximum zoom reached. Switching turns!';
-        currentTeam = (currentTeam === 'A') ? 'B' : 'A'; // Switch turns
-        currentTeamElem.textContent = `Team ${currentTeam}'s Turn`; // Update current turn display
 
-        if (currentImageIndex !== images.length - 1) {
-            currentImageIndex = (currentImageIndex + 1) % images.length; // Change to next image
-            loadImage(); // Load next image
-        } else {
-            clearInterval(timer);
-            alert("Game over!")
-        }
+        messageElem.textContent = 'Maximum zoom reached. Switching turns!';
+        showOverlay(); // Show overlay on wrong guess
 
     } else {
+
         zoomOut()
         messageElem.textContent = 'Incorrect, try zooming out and guess again!';
+
     }
 }
 
@@ -210,8 +272,9 @@ addPlayerButton.addEventListener('click', () => {
     }
 });
 
-// Randomize players into two teams
-randomizeTeamsButton.addEventListener('click', () => {
+var teamsRandomized = false;
+function randomizeTeams() {
+
     if (players.length < 2) {
         alert("Please add at least two players.");
         return;
@@ -224,21 +287,18 @@ randomizeTeamsButton.addEventListener('click', () => {
     teamBPlayers = players.slice(mid);
 
     // Display team members
-    teamAPlayersElem.textContent = `${teamAPlayers.join(", ")} (${teamAPlayers.length})`;
-    teamBPlayersElem.textContent = `${teamBPlayers.join(", ")} (${teamBPlayers.length})`;
+    teamAPlayersElem.innerHTML = `<p>${teamAPlayers.join("<br/>")}</p>`;
+    document.getElementById("teamAPlayersCount").textContent = teamAPlayers.length;
 
-    // Initialize scores and other game states
-    teamAScore = 0;
-    teamBScore = 0;
-    scoreAElem.textContent = teamAScore;
-    scoreBElem.textContent = teamBScore;
-    currentTeam = 'A';
-    currentTeamElem.textContent = `Team A's Turn`;
-    // loadImage(); // Load the first image
-});
+    teamBPlayersElem.innerHTML = `<p>${teamBPlayers.join("<br/>")}</p>`;
+    document.getElementById("teamBPlayersCount").textContent = teamBPlayers.length;
 
-// Set team's turn display at the start
-currentTeamElem.textContent = `Team ${currentTeam}'s Turn`;
+    teamsRandomized = true;
+
+}
+
+// Randomize players into two teams
+randomizeTeamsButton.addEventListener('click', randomizeTeams);
 
 startGameButton.addEventListener('click', startGame);
 correctButton.addEventListener('click', handleCorrectGuess);

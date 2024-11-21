@@ -21,7 +21,7 @@ body {
     width: 45%;
     margin: 20px;
     padding: 10px;
-    border: 2px solid #007BFF;
+    border: 2px solid black;
     border-radius: 10px;
 }
 
@@ -34,7 +34,7 @@ body {
     width: 500px; /* Set width of zoom box */
     height: 500px; /* Set height of zoom box */
     margin: 0 auto;
-    border: 2px solid #007BFF;
+    border: 2px solid black;
     position: relative;
     display: flex; /* Use flexbox to center the image */
     justify-content: center; 
@@ -44,7 +44,7 @@ body {
 #image {
     transform-origin: center; /* Set the origin point for zooming to the center */
     transition: transform 0.3s; /* Smooth transition */
-    width: auto; /* Allow the image to scale beyond its original size */
+    width: 1500px;
     transform: scale(3); /* Start zoomed in */
 }
 
@@ -85,4 +85,74 @@ body {
 #correctButton:hover {
     color: white; /* Change color on hover for wrong guess */
     background-color: green; /* Change color on hover for correct guess */
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Stack items vertically */
+    color: white;
+    text-align: center;
+    z-index: 1000; /* Make sure it's on top */
+}
+
+#overlay img {
+    max-width: 80%;
+    max-height: 80%;
+    margin-bottom: 20px; /* Space between image and answer */
+}
+
+#answerText {
+    margin-bottom: 20px; /* Space between answer and button */
+}
+
+#nextImageButton {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#nextImageButton:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+
+#gameOverOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Darker background */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Stack items vertically */
+    color: white;
+    text-align: center;
+    z-index: 1001; /* Above other overlays */
+}
+
+#restartGameButton {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the button */
+}
+
+#restartGameButton:hover {
+    background-color: #45a049; /* Darker green on hover */
 }
