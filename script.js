@@ -98,15 +98,32 @@ function showGameOverOverlay() {
     
     // All images have been used, end the game
     let winningTeam = '';
+    let resultGif = '';
+
     if (teamAScore > teamBScore) {
         winningTeam = 'Team A Wins!';
+        resultGif = '<iframe src="https://giphy.com/embed/zloyHJyX2BjFidEzob" width="480" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/olympijskytym-victory-czechteam-martindoktor-zloyHJyX2BjFidEzob">via GIPHY</a></p>'
     } else if (teamBScore > teamAScore) {
         winningTeam = 'Team B Wins!';
+        resultGif = '<iframe src="https://giphy.com/embed/vI6F4aZMbPwkT5N3YS" width="480" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/bayer04-bayer-leverkusen-b042122-bayer04-vI6F4aZMbPwkT5N3YS">via GIPHY</a></p>'
     } else {
         winningTeam = 'It\'s a Tie!';
+        resultGif = '<iframe src="https://giphy.com/embed/2ts0GOm9Laawo" width="480" height="269" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/neutrality-2ts0GOm9Laawo">via GIPHY</a></p>';
     }
 
     document.getElementById('winningTeam').textContent = winningTeam; // Set winning team
+    document.getElementById('resultGif').innerHTML = resultGif; // Set winning team
+
+    imageContainer.style = "display:none";
+    
+    teamAElem.style.fontSize = '';
+    teamAElem.style.color = 'black';
+    teamAElem.style.backgroundColor = 'white';
+
+    teamBElem.style.fontSize = '';
+    teamBElem.style.color = 'black';
+    teamBElem.style.backgroundColor = 'white';
+
     gameOverOverlay.style.display = 'flex'; // Show overlay
 
 }
