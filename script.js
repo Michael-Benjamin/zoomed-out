@@ -1,11 +1,45 @@
 // Game Variables
 const images = [
-    { src: "images/image1.jpg", answer: "orange" },
-    { src: "images/image2.jpg", answer: "bee" },
-    { src: "images/image3.jpg", answer: "guitar" },
-    { src: "images/image4.jpg", answer: "coffee" },
-    { src: "images/image5.jpg", answer: "measuring tape" },
-    { src: "images/image6.jpg", answer: "moss" },
+    // { id: 1, src: "images/image1.jpg", answer: "strawberry" },
+    // { id: 2, src: "images/image2.jpg", answer: "fly" },
+    // { id: 3, src: "images/image3.jpg", answer: "turtle" },
+    // { id: 4, src: "images/image4.jpg", answer: "coffee beans" },
+    // { id: 5, src: "images/image5.jpg", answer: "measuring tape" },
+    // { id: 6, src: "images/image6.jpg", answer: "moss" },
+    // { id: 7, src: "images/image7.jpg", answer: "nail clipper" }, // needs work
+    // { id: 8, src: "images/image8.jpg", answer: "coin" }, // needs work
+    // { id: 9, src: "images/image9.jpg", answer: "chocolate" },
+    // { id: 10, src: "images/image10.jpg", answer: "onion" },
+    // { id: 11, src: "images/image11.jpg", answer: "dandelion" },
+    // { id: 12, src: "images/image12.jpg", answer: "egg" },
+    // { id: 13, src: "images/image13.jpg", answer: "cuttlery" },
+    // { id: 14, src: "images/image14.jpg", answer: "sunflower" }, // needs work
+    // { id: 15, src: "images/image15.jpg", answer: "pinata" }, // needs work
+    // { id: 16, src: "images/image16.jpg", answer: "hard drive" }, // needs work
+    // { id: 17, src: "images/image17.jpg", answer: "watch" },
+    // { id: 18, src: "images/image18.jpg", answer: "ginger" },
+    // { id: 19, src: "images/image19.jpg", answer: "grasshopper" }, // needs work
+    // { id: 20, src: "images/image20.jpg", answer: "legos" },
+    // { id: 21, src: "images/image21.jpg", answer: "matchstick" },
+    // { id: 22, src: "images/image22.jpg", answer: "badminton" },
+    // { id: 23, src: "images/image23.jpg", answer: "basketball hoop" },
+    // { id: 24, src: "images/image24.jpg", answer: "cat iris" }, // needs work
+    // { id: 25, src: "images/image25.jpg", answer: "rose" },
+    // { id: 26, src: "images/image26.jpg", answer: "monkey" },
+    // { id: 27, src: "images/image27.jpg", answer: "oats" },
+    // { id: 28, src: "images/image28.jpg", answer: "bike wheel" },
+    // { id: 29, src: "images/image29.jpg", answer: "cockatoo" },
+    // { id: 30, src: "images/image30.jpg", answer: "lion" },
+    // { id: 31, src: "images/image31.jpg", answer: "speaker" },
+    // { id: 32, src: "images/image32.jpg", answer: "mushroom" },
+    { id: 33, src: "images/image33.jpg", answer: "kiwi" },
+    { id: 34, src: "images/image34.jpg", answer: "candle" },
+    { id: 35, src: "images/image35.jpg", answer: "tennis ball" },
+    { id: 36, src: "images/image36.jpg", answer: "chain" },
+    { id: 37, src: "images/image37.jpg", answer: "newspaper" },
+    { id: 38, src: "images/image38.jpg", answer: "microscope" },
+    { id: 39, src: "images/image39.jpg", answer: "koala bear" },
+
 ]; // Add as many images as you like
 
 let currentImageIndex = 0;
@@ -42,16 +76,38 @@ const teamAPlayersElem = document.getElementById('teamAPlayers');
 const teamBPlayersElem = document.getElementById('teamBPlayers');
 const timerDisplay = document.getElementById('timerValue');
 
+
 function startGame() {
     playerManagementContainer.style = "display:none";
     imageContainer.style = "display:block";
+    shuffleImages();
     // Set the initial image
     loadImage();
 }
 
+let shuffledImages = []; // Array to hold shuffled images
+
+// Shuffle the images array
+function shuffleImages() {
+    shuffledImages = images.slice(); // Create a copy of the images array
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffledImages.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledImages[i], shuffledImages[j]] = [shuffledImages[j], shuffledImages[i]];
+    }
+}
+
 // Load the current image based on the index
 function loadImage() {
-    imageElem.src = images[currentImageIndex].src;
+    
+    if (currentImageIndex >= shuffledImages.length) {
+        messageElem.textContent = 'All images have been used!';
+        return; // Stop loading images if all have been used
+    }
+
+    const currentImage = shuffledImages[currentImageIndex];
+    imageElem.src = currentImage.src;
+    console.log(`${Date.now()} : ${currentImage.answer}`);
     zoomLevel = MAX_ZOOM_LEVEL; // Reset the zoom level
     imageElem.style.transform = `scale(${zoomLevel})`; // Apply zoom
     updatePointsIndicator();
@@ -106,6 +162,7 @@ function handleCorrectGuess() {
         currentImageIndex = (currentImageIndex + 1) % images.length; // Change to next image
         loadImage(); // Load next image
     } else {
+        clearInterval(timer);
         alert("Game over!")
     }
 }
@@ -121,6 +178,7 @@ function handleWrongGuess() {
             currentImageIndex = (currentImageIndex + 1) % images.length; // Change to next image
             loadImage(); // Load next image
         } else {
+            clearInterval(timer);
             alert("Game over!")
         }
 
@@ -176,7 +234,7 @@ randomizeTeamsButton.addEventListener('click', () => {
     scoreBElem.textContent = teamBScore;
     currentTeam = 'A';
     currentTeamElem.textContent = `Team A's Turn`;
-    loadImage(); // Load the first image
+    // loadImage(); // Load the first image
 });
 
 // Set team's turn display at the start
