@@ -7,3 +7,4 @@ How to add, update, remove images
 - Open the images.js file
 - Modify the json
 - You can use url or the path to an image on your local machine
+- Also specify the answer of what the image is
