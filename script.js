@@ -42,6 +42,9 @@ const gameOverOverlay = document.getElementById('gameOverOverlay');
 
 // Upload funtionality
 document.getElementById('uploadButton').addEventListener('click', function() {
+
+    document.getElementById('uploadButton').setAttribute('disabled', 'true');
+
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
     
@@ -65,6 +68,9 @@ document.getElementById('uploadButton').addEventListener('click', function() {
     } else {
         alert("Please select a file.");
     }
+
+    document.getElementById('uploadButton').removeAttribute('disabled');
+
 });
 
 
