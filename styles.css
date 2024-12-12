@@ -4,6 +4,15 @@ body {
     background-color: #f4f4f4;
 }
 
+#displayArea {
+    margin-top: 30px;
+}
+
+.displayImage {
+    max-height: 100px;
+    margin: 10px;
+}
+
 #player-management {
     margin-bottom: 20px;
 }
@@ -54,7 +63,7 @@ body {
     font-weight: bold;
 }
 
-.guess-button, #startGameButton {
+.guess-button, #startGameButton, #randomizeTeamsButton {
     margin-top: 10px;
     padding: 10px 15px;
     font-size: 20px; /* Increase font size for symbols */
@@ -65,7 +74,7 @@ body {
     transition: color 0.3s; /* Smooth transition for color change */
 }
 
-#startGameButton:hover {
+#startGameButton:hover, #randomizeTeamsButton:hover {
     color: white;
     background-color: black;
 }

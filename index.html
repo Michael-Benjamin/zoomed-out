@@ -4,18 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoomed Out Challenge</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Zoomed Out Challenge</h1>
-    <div id="player-management">
+    <div id="upload-images">
+        <h1>Upload Excel Sheet with Images and Answers</h1>
+        <input type="file" id="fileInput" accept=".xlsx" />
+        <button id="uploadButton">Upload</button>
+
+        <div id="displayArea" style="display: none;">
+            <button id="confirmImages">Confirm</button>
+            <table id="displayTable" style="margin-left: auto; margin-right: auto; width: 700px;">
+            </table>
+        </div>
+    </div>
+    <div id="player-management" style="display: none;">
         <input type="text" id="playerInput" placeholder="Enter player name" />
         <button id="addPlayerButton">Add Player</button>
-        <button id="randomizeTeamsButton">Randomize Teams</button>
         <div id="players"></div>
-        <button id="startGameButton">Start Game</button>
+        <button id="randomizeTeamsButton" style="display: none;">Randomize Teams</button>
+        <button id="startGameButton" style="display: none;">Start Game</button>
     </div>
-    <div id="teams">
+    <div id="teams" style="display: none;">
         <div class="team" id="teamA">
             <h2>Team A (<span id="teamAPlayersCount"></span>)</h2>
             <p><span id="teamAPlayers"></span></p>

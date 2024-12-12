@@ -40,6 +40,120 @@ const nextImageButton = document.getElementById('nextImageButton');
 const restartGameButton = document.getElementById('restartGameButton');
 const gameOverOverlay = document.getElementById('gameOverOverlay');
 
+// Upload funtionality
+document.getElementById('uploadButton').addEventListener('click', function() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            
+            // Assuming your data is in the first sheet
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+
+            // Convert the data to JSON
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            displayData(jsonData);
+        };
+        
+        reader.readAsArrayBuffer(file);
+    } else {
+        alert("Please select a file.");
+    }
+});
+
+
+let tempImages = [];
+
+if (localStorage.getItem('images') != undefined && localStorage.getItem('images') != '' && localStorage.getItem('images') != null) {
+
+    if (confirm("We found saved images from your previous game. Would you like to load them?") == true) {
+
+        try {
+            const savedImages = JSON.parse(localStorage.getItem('images'));
+            const imagesForReview = [['Image', 'Answer'], ...savedImages.map(x => [x.src, x.answer])];
+            displayData(imagesForReview);
+        } catch {
+            console.log("Unable to read saved images")
+        }
+
+    }
+
+}
+
+function displayData(data) {
+    const displayTable = document.getElementById('displayTable');
+    displayTable.innerHTML = ''; // Clear previous data
+
+    const headerRowElement = document.createElement('tr');
+    const imageHeaderCellElement = document.createElement('th');
+    const answerHeaderCellElement = document.createElement('th');
+
+    imageHeaderCellElement.textContent = 'Image';
+    answerHeaderCellElement.textContent = 'Answer';
+
+    headerRowElement.appendChild(imageHeaderCellElement);
+    headerRowElement.appendChild(answerHeaderCellElement);
+
+    displayTable.appendChild(headerRowElement);
+
+
+    // Loop through each row (starting from the index 1 to skip headers)
+    for (let i = 1; i < data.length; i++) {
+        const [imageName, answer] = data[i];
+
+        if (imageName && answer) {
+            const rowElement = document.createElement('tr');
+            const imageCellElement = document.createElement('td');
+            const answerCellElement = document.createElement('td');
+            const imgElement = document.createElement('img');
+            imgElement.classList.add('displayImage');
+            imgElement.src = imageName; // Assuming image names are stored correctly in the sheet
+            imgElement.alt = answer; 
+            imgElement.title = answer; // You can set the title or another attribute to show the answer
+
+            imageCellElement.appendChild(imgElement);
+            answerCellElement.textContent = answer;
+
+            rowElement.appendChild(imageCellElement);
+            rowElement.appendChild(answerCellElement);
+
+            displayTable.appendChild(rowElement);
+
+            tempImages.push({
+                src: imageName,
+                answer: answer
+            });
+        }
+    }
+
+    document.getElementById('displayArea').style.display = 'block';
+}
+
+document.getElementById('confirmImages').addEventListener('click', function() {
+    images = tempImages;
+    tempImages = [];
+    
+    try {
+        localStorage.setItem('images', JSON.stringify(images));
+    } catch {
+        console.log('Unable to save images in case of refresh')
+    }
+
+    displayTable.innerHTML = ''; // Clear previous data
+    document.getElementById('displayArea').style.display = 'none';
+
+    document.getElementById('upload-images').style.display = 'none';
+    document.getElementById('player-management').style.display = 'block';
+    document.getElementById('teams').style.display = 'block';
+
+});
+
 
 function startGame() {
 
@@ -187,6 +301,7 @@ function showOverlay() {
 // Hide overlay and load next image
 nextImageButton.addEventListener('click', () => {
 
+    imageElem.src = ''; // Clear the game image
     overlay.style.display = 'none'; // Hide overlay
 
     if (currentImageIndex !== images.length - 1) {
@@ -280,20 +395,32 @@ function zoomOut() {
 }
 
 // Add player to the list
-addPlayerButton.addEventListener('click', () => {
+function addPlayer() {
     const playerName = playerInput.value.trim();
     if (playerName) {
         players.push(playerName);
         playerInput.value = ''; // Clear input field
         playersElem.textContent = `${players.join(", ")} (${players.length})`;
+
+        startGameButton.style.display = 'inline';
+        randomizeTeamsButton.style.display = 'inline';
+    
+        randomizeTeams();    
+    } else {
+        alert('Please enter a name')
     }
+}
+addPlayerButton.addEventListener('click', addPlayer);
+playerInput.addEventListener('keydown', (event) => {
+    if (event.key == 'Enter')
+        addPlayer();
 });
 
 var teamsRandomized = false;
 function randomizeTeams() {
 
-    if (players.length < 2) {
-        alert("Please add at least two players.");
+    if (players.length < 1) {
+        alert("Please add at least one player.");
         return;
     }
 
